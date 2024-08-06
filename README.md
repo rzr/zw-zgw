@@ -1,116 +1,127 @@
-# zipgateway
+# Z/IP Gateway SDK
 
-## Licensing
+## LICENSING
 
-ZipGateway is covered by one of several different licenses.
+Z/IP Gateway is covered by one of several different licenses.
 The default license is the [Master Software License Agreement (MSLA)](https://www.silabs.com/about-us/legal/master-software-license-agreement), which applies unless otherwise noted. 
 Refer to [LICENSE](./LICENSE) for more details.
 
-# How to build zipgateway
 
-Reference OS is currently debian-9 (EoL), Only 32 bits OS are currently supported.
+## HOW TO USE Z/IP GATEWAY
 
-A helper script allows to setup env and build on device, docker or cloud (eg: github actions).
-
-```bash
-./helper.mk help
-./helper.mk setup/debian
-./helper.mk
-```
-
-If using a different OS you can rely on docker (assuming you have installed it along docker-compose)
-
-```bash
-./helper.mk help
-./helper.mk docker/run
-```
-
-Building on reference device (Raspberry Pi3+ debian-9 EoL) is also possible too:
+Reference setup, is RaspberryPi on rasbpian-9 OS (EoL)
 
 Dump image to sdcard from:
 
 - http://downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-04-09/2019-04-08-raspbian-stretch-lite.zip
 
-```bash
+Prepare system with required dependencies:
+
+```sh
+sudo sed -e 's|raspbian.raspberrypi.org|legacy.raspbian.org|g' \
+            -i /etc/apt/sources.list \
+            -i /etc/apt/sources.list.d/*.list
+
+sudo apt-get update
+sudo apt-get install -y etckeeper # Will track changes in /etc
+```
+
+Setup a Z-Wave NCP controller, firmware should be flashed using tools from:
+[simplicity studio](https://www.silabs.com/developers/simplicity-studio).
+
+The alternative option is to download firmware
+["zwave_ncp_serial_api_controller-${board}-${region}.hex"](https://github.com/SiliconLabs/gecko_sdk/releases#demo_application.zip) 
+and deploy it using 
+[SimplicityCommander-Linux](https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip)
+
+Then connected to USB port, it should be detected, you can check using:
+
+```sh
+ls /dev/serial/by-id/usb-Silicon_Labs_*
+```
+
+Download zipgateway deb package from release page:
+
+- [https://github.com/SiliconLabs/zipgateway/releases](https://github.com/SiliconLabs/zipgateway/releases)
+
+Copy it to target device and install it along its dependencies and configure daemon accordingly.
+
+```sh
+sudo dpkg -i zipgateway-*-Linux-armhf.deb || sudo apt install -f # To install missing deps
+sudo apt --fix-broken install # Will resume installing package if needed
+sudo dpkg -L zipgateway # List server and client and other utilities
+cat /usr/local/etc/zipgateway.cfg # To check configuration file
+```
+
+Use zipgateway using example libzwaveip's reference_client 
+(now part of the package previously installed)
+
+```sh
+# Check if daemon is running
+$ systemctl status zipgateway # should report service active
+$ tail -F /usr/log/zipgateway.log # To see traces
+
+# Connect to daemon using client, and use interactive shell:
+$ reference_client # Will report usage
+
+reference_client -n1 
+(ZIP) help
+(ZIP) setdefault
+(ZIP) list
+(ZIP) addnode
+...
+```
+
+## HOW TO BUILD Z/IP/GATEWAY
+
+As said above, only 32 bits OS are currently supported. 
+
+Reference OS is currently debian-9 (EoL), native building is supported (using cmake),
+and you can rely on helper script to setup system and pass tests to generate a debian package 
+ready to be installed (see above) (This script can be also run from docker or github)
+
+
+### NATIVE BUILD ON TARGET DEVICE 
+
+It should take less than 20 min to build and run tests.
+
+```sh
+sudo apt install make
 ./helper.mk help
 ./helper.mk setup/raspbian
 ./helper.mk
 ```
-It should take less than 20 min to build and run tests,
+
+For the record, dependencies are listed in helper.mk, 
+compilation relies on cmake using standard directives:
+
+```sh
+mkdir build
+cmake ..
+cmake --build .
+```
+
+Feel free to tweak env, 
 debugging on board using gdb can be helpful too.
 
 
-# How to build documentation on Ubuntu 20.04.5 LTS (Focal Fossa)
-----------------------------
-```bash
-$ sudo apt-get install -y doxygen graphviz mscgen roffit perl git python3 cmake\
-                           gcc xsltproc bison flex gcc-9-multilib \
-                          pkg-config:i386 libssl-dev:i386 libc6-dev:i386 \
-                          libusb-1.0-0-dev:i386 libjson-c-dev:i386 \
-                          openjdk-8-jre curl g++-9-multilib libstdc++-9-dev
-```
-On all systems:
-```bash
-$ curl -L http://sourceforge.net/projects/plantuml/files/plantuml.1.2019.7.jar/download --output /opt/plantuml.jar
-```
+### BUILD ON HOST
 
-2. Build documentation
-```bash
-$ export PLANTUML_JAR_PATH=/opt/plantuml.jar
-$ mkdir build
-$ cd build/
-$ cmake ..
-$ make doc 
-```
-
-3. For detailed description on compiling zipgateway please refer to user guide 
-generated in step 2. 
-Open src/doc/html/index.hml in browser
-
-```bash
-$ xdg-open src/doc/html/index.html
-```
-# Quick compiling Z/IP Gateway debian package
-
-## Compilation of Z/IP Gateway in i386 Ubuntu docker
-
-**Assuming you cloned the git repo in ```~/zw-zgw```**
-
-### On host machine
-```bash
-dev-machine:~/zw-zgw/$ cd docker/i386_ubuntu_20_04/
-dev-machine:~/zw-zgw/$ make image
-dev-machine:~/zw-zgw/$ docker run -v ~/zw-zgw/:/zgw -it zwave/zgw_i386_ubuntu_20_04 bash
-```
-
-### Inside docker
-
-```java
-root@docker:/zgw/# mkdir build
-root@docker:/zgw/# cd build
-root@docker:/zgw/# cmake ..
-root@docker:/zgw/# make
-root@docker:/zgw/# make package
-```
-
-## Compilation of Z/IP Gateway in arm Ubuntu docker for Raspberry Pi
-
-### On host machine
-
-```bash
-dev-machine:~/zw-zgw/$ cd docker/armhf_debian_stretch_cross/
-dev-machine:~/zw-zgw/$ make image
-dev-machine:~/zw-zgw/$ docker run -v ~/zw-zgw/:/zgw -it zwave/zgw_armhf_debian_stretch_cross bash
-```
-
-### Inside docker
-
-```java
-root@docker:/zgw/# mkdir build
-root@docker:/zgw/# cd build
-root@docker:/zgw/# cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/debian_stretch_armhf.cmake ..
-root@docker:/zgw/# make
-root@docker:/zgw/# make package
-```
+To speed up the build, native build can be deported to host using 
+different containerization techniques (docker, systemd. chroot, qemu, binfmt),
+check DevTools directory for more.
 
 
+## MORE
+
+Extra documentation is available in doc folder or online:
+
+- https://github.com/SiliconLabs/zipgateway/
+- https://www.silabs.com/wireless/z-wave/specification
+- https://docs.silabs.com/z-wave/1.0.1/version-history 
+- https://www.silabs.com/wireless/z-wave
+- https://www.silabs.com/documents/public/release-notes/SRN14932-1C.pdf
+- https://community.silabs.com/s/topic/0TO1M000000qHcQWAU/zwave
+- https://z-wavealliance.org/
+- https://github.com/Z-Wave-Alliance/
+- https://www.silabs.com/support
