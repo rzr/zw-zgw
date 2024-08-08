@@ -1,6 +1,4 @@
-# Z/IP Gateway SDK 7.18.03
-
-June 1, 2023
+# Z/IP Gateway SDK 7.18.04
 
 The Z/IP Gateway emulates the behavior of IP-enabled Z-Wave devices so that IP
 applications may interact with Z-Wave devices via normal IP routing principles. The Z/IP
@@ -8,15 +6,19 @@ Gateway decodes Z/IP Packet headers and forwards extracted Z-Wave commands to
 the node identified by the given IPv6 or IPv4 address.
 
 These release notes cover Z/IP Gateway SDK version(s):
-7.18.03
+7.18.04
 
-This file is a derivate of document
+For the record this file was a derivate of document
 [SRN14932-1C.pdf](https://www.silabs.com/documents/public/release-notes/SRN14932-1C.pdf)
-which can be downloaded using [simplicity studio](https://www.silabs.com/developers/simplicity-studio).
+which was downloaded using [simplicity studio](https://www.silabs.com/developers/simplicity-studio).
 
 ## NEW FEATURES
 
-Security hardening
+- Project relocated to github:
+  - https://github.com/SiliconLabs/zipgateway
+- libzipgateway agregated into main package
+- Security hardening
+- More configuration
 
 ## Compatibility and Use Notices
 
@@ -63,14 +65,17 @@ many sections. Essentially, the key words “MUST”, “MUST NOT”, “REQUIRE
 
 ## 1 Improvements
 
-- Security hardening (Security Advisory A-00000457)
-- Documentation to support docker for compilation
-- Testing
+- Security hardening
+- [ZGW-3413: Improve keys randomization](https://github.com/SiliconLabs/zipgateway/pull/12)
+- More customization: Region, Association Limit (Virtualnodes)
+- Native building on device, docker or cloud
 
 ## 2 Fixed Issues
 
-Fixed in release 7.18.03
+Fixed in release 7.18.04
 
+- [Support single temporal associations](https://github.com/SiliconLabs/zipgateway/pull/5)
+- [ZGW-3393: Check node id base type when wrong source node id is received](https://github.com/SiliconLabs/zipgateway/pull/20)
 - ZWG: Fix Network management state machine for new add node mode
 - SWPROT-7936: Filesystem conversion tool for migration steps for 700 series to 800 series
 - SWPROT-8064: Fix missing nodes when exporting to filesystem
@@ -155,29 +160,10 @@ in SDS11846: Z-Wave Plus Role Type Specification.
 The Z/IP Gateway Software Developers Kit contains the following components:
 
 - Debian packages:
-  - Z/IP Gateway 7.18.03, for Raspberry Pi 3B+
-  - Z/IP Gateway 7.18.03, for Linux i386
+  - Z/IP Gateway for Raspberry Pi 3B+
 
 - Source code:
-  - Z/IP Gateway 7.18.03
-
-- libzwaveip 7.18.03
-
-- Documentation:
-  - INS12503, Z/IP Gateway Porting Process
-  - SDS12938, Z/IP LAN Security
-  - SDS12089, Z/IP Gateway Bootstrapping
-  - SDS11756, Z/IP DNS Discovery support (DNS-SD, mDNS)
-  - SDS11633, Z/IP Resource Directory (RD, DNS-SD, mDNS)
-  - SDS11445, IP Architecture Framework for Z-Wave (Z/IP)
-  - SDS13944, Node Provisioning Information Type Registry (QR code, Z/IP Gateway, SmartStart)
-  - Z/IP Security 2 in Z/IP Gateway
-  - Z/IP Gateway Source Code Documentation
-  - Z/IP Gateway User Guide (Z-Wave & IP Basics, Compilation, Installation, Troubleshooting, Sample Code)
-  - libzwaveip documentation in the file libzwaveip-7.18.01.release-docs.zip
-    Additionally, the following documentation can be found in:
-    https://www.silabs.com/products/wireless/mesh-networking/z-wave/specification:
-  - Z-Wave Command Class specifications
+  - Z/IP Gateway and libzwaveip
 
 ### 5.1 Key Features of Z/IP Gateway SDK
 
