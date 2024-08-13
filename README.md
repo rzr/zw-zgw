@@ -45,7 +45,7 @@ sudo dpkg -L zipgateway # List server and client and other utilities
 cat /usr/local/etc/zipgateway.cfg # To check configuration file
 ```
 
-- Use Z/IP Gateway with libzwaveip's reference client.
+- Use Z/IP Gateway with libzwaveip's reference client (part of the package).
 
 ```sh
 # Check if daemon is running
