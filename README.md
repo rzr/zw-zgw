@@ -146,7 +146,7 @@ Feel free to tweak env, debugging using gdb can be helpful too.
 ### BUILD ON HOST
 
 To speed up the build process, native build can be deported to the host using
-different containerization techniques (docker, systemd. chroot, qemu, binfmt).
+different containerization techniques (docker, systemd, chroot, qemu, binfmt).
 Check the [DevTools](./DevTools/) directory for more information.
 
 ## MORE
