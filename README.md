@@ -3,7 +3,7 @@
 The Z/IP gateway is a free reference design intended for development and demonstration purposes only. It is provided as is, with no warranties. Customers are advised to conduct security and compliance testing of all gateways during the product design process.
 
 > [!WARNING] 
-> The Z/IP Gatreway solution is in maintenance mode. To access a maintained Z-Wave gateway solution supporting the latest protocol features, refer to the [Unify SDK](https://github.com/SiliconLabs/UnifySDK) project.
+> The Z/IP Gateway solution is in maintenance mode. To access a maintained Z-Wave gateway solution supporting the latest protocol features, refer to the [Unify SDK](https://github.com/SiliconLabs/UnifySDK) project.
 
 ## LICENSING
 
