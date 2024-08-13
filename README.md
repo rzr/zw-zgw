@@ -115,6 +115,8 @@ bytestream: 25 03 00 00 00
 
 ```
 
+## HOW TO BUILD Z/IP GATEWAY
+
 Only 32-bit platforms are currently supported.
 
 The reference OS is currently debian-9 (EoL). Native build is supported using cmake. You can rely on helper scripts to set up a system and pass tests to generate a debian package ready to be installed.
