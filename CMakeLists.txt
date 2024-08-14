@@ -115,8 +115,8 @@ if(NOT VERSION MATCHES "^ver")
   message(WARNING "log: Base is a tagged version: ${VERSION}, fallback to default (0)")
   set(VERSION ver0_0.00)
 endif()
-  
-message(STATUS "log: parse the version information into pieces : ${VERSION}")
+
+message(STATUS "log: parse the version information into pieces: ${VERSION}")
 string(REGEX REPLACE "^ver([0-9]+)_.*" "\\1" VERSION_MAJOR "${VERSION}")
 string(REGEX REPLACE "^ver[0-9]+_([0-9]+).*" "\\1" VERSION_MINOR "${VERSION}")
 string(REGEX REPLACE "^ver[0-9]+_[0-9]+.[0-9]+[0-9,R,C,_]*-.[0-9]*-(.*)" "\\1" VERSION_SHA1 "${VERSION}")
